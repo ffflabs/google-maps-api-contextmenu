@@ -7,7 +7,7 @@ A contextMenu for google.maps.api v3
 
 usage:
 
-```sh
+```js
 var menuStyle = {
 		menu: 'context_menu',
 		menuSeparator: 'context_menu_separator',
