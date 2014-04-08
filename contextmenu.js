@@ -26,53 +26,88 @@ google.maps.ContextMenu = function(map, options, callback) {
 	this.pixelOffset = options.pixelOffset || new google.maps.Point(10, -5);
 	this.callback = callback || null;
 	this.eventName = options.eventName || 'menu_item_selected';
+
 	/**
 	 * [createMenuItem description]
-	 * @param  {Object} menuitem An object with a label (required), a className (optional) and an id (optional)
+	 * @param  {Object} itemOptions An object with a label (required), a className (optional) and an id (optional)
 	 * @param  {Boolean} before when True, the menuitem is prepended to the menu instead of appended.
 	 */
-	this.createMenuItem = function(menuitem, before) {
+	this.createMenuItem = function(itemOptions, before) {
 		var self = this;
 		if (!self.menu_) {
 			console.log('No menu');
 			return;
 		}
+		itemOptions = itemOptions || {};
 		var menuItem = document.createElement('div');
-		menuItem.innerHTML = menuitem.label;
-		menuItem.className = menuitem.className || self.classNames_.menuItem;
-		menuItem.eventName = menuItem.eventName || self.eventName;
-		if (menuitem.id) {
-			menuItem.id = menuitem.id;
+		menuItem.innerHTML = itemOptions.label;
+		menuItem.className = itemOptions.className || self.classNames_.menuItem;
+		menuItem.eventName = itemOptions.eventName || self.eventName;
+		if (itemOptions.id) {
+			menuItem.id = itemOptions.id;
 		}
 		menuItem.style.cssText = 'cursor:pointer; white-space:nowrap';
 
 		menuItem.onclick = function() {
-			google.maps.event.trigger(self, menuItem.eventName, self.position_, menuitem.eventName);
+			google.maps.event.trigger(self, menuItem.eventName, self.position_, itemOptions.eventName);
 		};
 		if (before) {
 			self.menu_.insertBefore(menuItem, self.menu_.firstChild);
+		} else if (itemOptions.container_id) {
+			document.getElementById(itemOptions.container_id).appendChild(menuItem);
 		} else {
 			self.menu_.appendChild(menuItem);
 		}
 
 	};
 
+
 	/**
-	 * [createMenuSeparator description]
-	 * @param  {Boolean} before when True, the menuitem is prepended to the menu instead of appended.
+	 * [createMenuGroup description]
+	 * @param  {Boolean} before when True, the menugroup is prepended to the menu instead of appended.
 	 */
-	this.createMenuSeparator = function(before) {
+	this.createMenuGroup = function(itemOptions, before) {
 		var self = this;
 		if (!self.menu_) {
 			console.log('No menu');
 			return;
 		}
+		itemOptions = itemOptions || {};
+		var menuGroup = document.createElement('span');
+
+		if (itemOptions.id) {
+			menuGroup.id = itemOptions.id;
+		}
+		if (before) {
+			self.menu_.insertBefore(menuGroup, self.menu_.firstChild);
+		} else {
+			self.menu_.appendChild(menuGroup);
+		}
+	};
+
+
+	/**
+	 * [createMenuSeparator description]
+	 * @param  {Boolean} before when True, the menuitem is prepended to the menu instead of appended.
+	 */
+	this.createMenuSeparator = function(itemOptions, before) {
+		var self = this;
+		if (!self.menu_) {
+			console.log('No menu');
+			return;
+		}
+		itemOptions = itemOptions || {};
 		var menuSeparator = document.createElement('div');
 		if (self.classNames_.menuSeparator) {
 			menuSeparator.className = self.classNames_.menuSeparator;
 		}
+		if (itemOptions.id) {
+			menuSeparator.id = itemOptions.id;
+		}
 		if (before) {
 			self.menu_.insertBefore(menuSeparator, self.menu_.firstChild);
+		} else if (itemOptions.container_id) {
+			document.getElementById(itemOptions.container_id).appendChild(menuSeparator);
 		} else {
 			self.menu_.appendChild(menuSeparator);
 		}
