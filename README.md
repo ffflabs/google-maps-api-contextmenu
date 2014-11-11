@@ -18,7 +18,7 @@ var menuStyle = {
 		id: "map_rightclick",
 		eventName: "menu_item_selected",
 		classNames: menuStyle,
-		menuitems: 
+		menuItems: 
 		[
 		   {label:'option1', id:'menu_option1'},
 		   {label:'option2', id:'menu_option2'},
